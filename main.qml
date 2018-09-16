@@ -12,12 +12,18 @@ Window {
     MButton {
         id : leftButtonId
         rectColor: "yellowgreen"
+
+        // Связывание сигнала и слота может быть выполнено через свойство
+        // (в данном примере это могло бы быть свойство target), либо
+        // явным образом, через уведомление onCompleted
+        //target: rightButtonId
     }
 
     MButton {
         id : rightButtonId
         rectColor: "dodgerblue"
         anchors.right: parent.right
+        //target: leftButtonId
     }
 
     Component.onCompleted: {

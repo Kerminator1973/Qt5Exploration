@@ -14,6 +14,16 @@ Item {
     // Свойство, отображаемое в элементе пользовательского интерфейса
     property int count: 0
 
+    // В QML сигнал и слот могут быть связана через специальное свойство
+    // в custom component. Тип свойства я указал как var, т.е. использование
+    // MButton приведёт к появлению рекурсии и приложение не сможет быть собрано
+    /*
+    property var target: null
+    onTargetChanged: {
+        notify.connect(target.receiveInfo)
+    }
+    */
+
     // Декларация сигнала
     signal notify( string count)
 
