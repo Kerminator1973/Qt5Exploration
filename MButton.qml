@@ -25,7 +25,7 @@ Item {
     */
 
     // Декларация сигнала
-    signal notify( string count)
+    signal notify(string count)
 
     // Слот, обрабатывающий сигнал об изменении счётчика
     function receiveInfo(_count){
