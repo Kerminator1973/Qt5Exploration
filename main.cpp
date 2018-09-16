@@ -1,6 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QDebug>   // Загловочный файл нужен для обеспечения возможности использовать qDebug()
+#include <QDebug>   // Заголовочный файл нужен для обеспечения возможности использовать qDebug()
 #include "myqmlproxyclass.h"
 
 // Ключевая ссылка:
