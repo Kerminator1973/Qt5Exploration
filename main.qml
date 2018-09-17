@@ -31,9 +31,15 @@ Window {
 
     MButton {
         id : rightButtonId
+        objectName: "TheSecondButton"
         rectColor: "dodgerblue"
         anchors.right: parent.right
         //target: leftButtonId
+
+        function logUsefulInfo(msg) {
+            console.log("It is useful information: " + msg);
+            return 55;
+        }
     }
 
     Component.onCompleted: {

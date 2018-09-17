@@ -20,8 +20,19 @@ int main(int argc, char *argv[])
     // Дальше выполняем настройки компонентов QML на странице
     QObject *wholeWindow = engine.rootObjects().first();
 
-    // TODO: Попробовать вот такой вариант поиска компонентов
-    //QObject *rect = object->findChild<QObject*>("rect");
+    // Пример вызова QML-функции из C++ кода. Ключевой момент: поиск
+    // QML-компонента осуществляется не по id, а по "objectName"
+    QObject *pQmlComponent = wholeWindow->findChild<QObject*>("TheSecondButton");
+    if(NULL != pQmlComponent) {
+
+        QVariant returnedValue;
+        QVariant msg = "Hello from C++";
+        QMetaObject::invokeMethod(pQmlComponent, "logUsefulInfo",
+            Q_RETURN_ARG(QVariant, returnedValue),
+            Q_ARG(QVariant, msg));
+
+        qDebug() << "The Result is:" << returnedValue;
+    }
 
     // Настраивать свойства свойства QML-компонентов можно двумя альтернативными способами
     wholeWindow->setProperty("title", "Signals and Slots (C++/QML)");
@@ -35,7 +46,8 @@ int main(int argc, char *argv[])
 
     // Указываем, что сигнал qmlSignal() главного окна QML, должен быть связан с методом
     // cppSlot() объекта myClass, который является Proxy-компонентом
-    qDebug() << QObject::connect(wholeWindow, SIGNAL(qmlSignal(QString)), &myClass, SLOT(cppSlot(QString)));
+    qDebug() << "The connection complete status is: " <<
+        QObject::connect(wholeWindow, SIGNAL(qmlSignal(QString)), &myClass, SLOT(cppSlot(QString)));
 
     // Запускаем основной цикл обработки сообщений
     return app.exec();
