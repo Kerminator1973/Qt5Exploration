@@ -13,8 +13,15 @@ Window {
 
     // Определяем слот, который будет получать информацию от MButtons
     // и пересылать этот сигнал дальше по цеполчке
-    function receiveInfo(_count){
+    function receiveInfo(_count) {
         qmlSignal("The count is " + _count)
+    }
+
+    function logReceivedList(someArray) {
+
+        console.log("Some list is received");
+        for (var i=0; i < someArray.length; i++)
+            console.log("Array item:", someArray[i]);
     }
 
     // Определяем две кнопки, сообщения о нажатии которых

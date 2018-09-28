@@ -10,6 +10,7 @@
 // http://doc.qt.io/qt-5/qtqml-cppintegration-interactqmlfromcpp.html
 
 static void createQMLDynamically(QQmlApplicationEngine& engine);
+static void sendStringListToQML(QObject *pWindow);
 
 int main(int argc, char *argv[])
 {
@@ -28,7 +29,7 @@ int main(int argc, char *argv[])
     // Пример вызова QML-функции из C++ кода. Ключевой момент: поиск
     // QML-компонента осуществляется не по id, а по "objectName"
     QObject *pQmlComponent = wholeWindow->findChild<QObject*>("TheSecondButton");
-    if(NULL != pQmlComponent) {
+    if(nullptr != pQmlComponent) {
 
         QVariant returnedValue;
         QVariant msg = "Hello from C++";
@@ -64,6 +65,9 @@ int main(int argc, char *argv[])
     qDebug() << "The connection complete status is: " <<
         QObject::connect(wholeWindow, SIGNAL(qmlSignal(QString)), &myClass, SLOT(cppSlot(QString)));
 
+    // Передаём в QML-код массив строк
+    sendStringListToQML(wholeWindow);
+
     // Запускаем основной цикл обработки сообщений
     return app.exec();
 }
@@ -72,10 +76,6 @@ int main(int argc, char *argv[])
 static void createQMLDynamically(QQmlApplicationEngine& engine)
 {
     QQuickWindow *window = qobject_cast<QQuickWindow*>(engine.rootObjects().at(0));
-    if (!window) {
-        qFatal("Error: Your root item has to be a window.");
-        return;
-    }
 
     QQmlComponent component(&engine, QUrl("qrc:/DynamicWindow.qml"));
     QQuickItem *object = qobject_cast<QQuickItem*>(component.create());
@@ -95,4 +95,14 @@ static void createQMLDynamically(QQmlApplicationEngine& engine)
     // TODO: Добавить настройку свойств динамически созданного объекта
     //object->setProperty("color", QVariant(QColor(255, 255, 255)));
     //object->setProperty("text", QVariant(QString("foo")));
+}
+
+static void sendStringListToQML(QObject *pWindow)
+{
+    // В список можно поместить объекты типов, известных классу QVariantList
+    QVariantList list;
+    list << 10 << QColor(Qt::green) << "bottles";
+
+    QMetaObject::invokeMethod(pWindow, "logReceivedList",
+        Q_ARG(QVariant, QVariant::fromValue(list)));
 }
