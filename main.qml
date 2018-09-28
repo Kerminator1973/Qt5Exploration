@@ -20,8 +20,10 @@ Window {
     function logReceivedList(someArray) {
 
         console.log("Some list is received");
-        for (var i=0; i < someArray.length; i++)
+        for (var i=0; i < someArray.length; i++) {
             console.log("Array item:", someArray[i]);
+            listModel.addElementToList(someArray[i]);
+        }
     }
 
     // Определяем две кнопки, сообщения о нажатии которых
@@ -46,6 +48,40 @@ Window {
         function logUsefulInfo(msg) {
             console.log("It is useful information: " + msg);
             return 55;
+        }
+    }
+
+    // ListView и ListModel используются для демонстрации возможности
+    // динамически добавлять элементы в список
+    ListView {
+        id: listView
+        anchors.left: leftButtonId.right
+        width: 150
+        height: 250
+
+        model: listModel
+        delegate: Rectangle {
+            width: listView.width
+            height: listView.height / 4
+            color: "yellow"
+
+            Text {
+                text: hour  // Текст берём из свойства "hour"
+                anchors.centerIn: parent
+            }
+        }
+    }
+
+    ListModel {
+        id: listModel
+        Component.onCompleted: {
+            // Пока ничего не добавляем
+        }
+
+        function addElementToList(element) {
+            // Добавляем в список пару key-value, в котором ключем
+            // является поле "hour", а значение передаётся из вне
+            append( {hour: element.toString()} );
         }
     }
 
