@@ -12,7 +12,7 @@ Window {
     signal qmlSignal(string msg)
 
     // Определяем слот, который будет получать информацию от MButtons
-    // и пересылать этот сигнал дальше по цеполчке
+    // и пересылать этот сигнал дальше по цепочке
     function receiveInfo(_count) {
         qmlSignal("The count is " + _count)
     }
@@ -93,6 +93,15 @@ Window {
         // Дополнительно связываем сигналы
         leftButtonId.notify.connect(rootComponentId.receiveInfo)
         rightButtonId.notify.connect(rootComponentId.receiveInfo)
+
+        // Выполняем работу с общей структурой, через конкретный объект,
+        // созданные в коде C++
+        console.log("classObj.sharedStruct.val = " + classObj.sharedStruct.val)
+        console.log("name1 =" + classObj.sharedStruct.name1)
+        console.log("name2 =" + classObj.sharedStruct.name2)
+
+        classObj.sharedStruct.name1 = "abc"  //Calls setter
+        classObj.sharedStruct.name2 = "ans" // Calls setter
     }
 }
 

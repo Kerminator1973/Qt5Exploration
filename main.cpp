@@ -6,11 +6,17 @@
 #include <QDebug>   // Заголовочный файл нужен для обеспечения возможности использовать qDebug()
 #include "myqmlproxyclass.h"
 
+// Включаемые файлы нужны для использования разделяемых между C++ и QML структур
+#include <QQmlContext>
+#include <QObject>
+#include "sharedclass.h"
+
 // Ключевая ссылка:
 // http://doc.qt.io/qt-5/qtqml-cppintegration-interactqmlfromcpp.html
 
 static void createQMLDynamically(QQmlApplicationEngine& engine);
 static void sendStringListToQML(QObject *pWindow);
+
 
 int main(int argc, char *argv[])
 {
@@ -19,6 +25,16 @@ int main(int argc, char *argv[])
     QGuiApplication app(argc, argv);
 
     QQmlApplicationEngine engine;
+
+    // Предоставляем возможность использования структуры, определённой
+    // в C++ в QML-коде. Структуру нужно определить до загрузки QML
+    SharedClass classObj;
+    classObj.strObj.m_val = 78;
+    classObj.strObj.m_name1 = "Maxim";
+    classObj.strObj.m_name2 = "Rozhkov";
+    engine.rootContext()->setContextProperty( "classObj", &classObj);
+
+    // Загружаем QML-документ
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty())
         return -1;
