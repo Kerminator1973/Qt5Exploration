@@ -17,7 +17,6 @@
 static void createQMLDynamically(QQmlApplicationEngine& engine);
 static void sendStringListToQML(QObject *pWindow);
 
-
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -74,12 +73,20 @@ int main(int argc, char *argv[])
 
     // Создаём Proxy-класс для обработки сигналов QML-кода.
     // Важно, чтобы класс MyQmlProxyClass был определён в отдельном заголовочной файле.
-    MyQmlProxyClass myClass;
+    MyQmlProxyClass myQMLProxyClass;
 
     // Указываем, что сигнал qmlSignal() главного окна QML, должен быть связан с методом
-    // cppSlot() объекта myClass, который является Proxy-компонентом
+    // cppSlot() объекта myClass, который является Proxy-компонентом.
+    //
+    // Общий синтаксис вызова connect():
+    // - Кто посылает
+    // - Что посылает
+    // - Кто обрабатывает
+    // - Какой метод обрабатывает
     qDebug() << "The connection complete status is: " <<
-        QObject::connect(wholeWindow, SIGNAL(qmlSignal(QString)), &myClass, SLOT(cppSlot(QString)));
+        QObject::connect(wholeWindow, SIGNAL(qmlSignal(QString)), &myQMLProxyClass, SLOT(cppSlot(QString)));
+
+    // TODO: Нужно вызывать и disconnect, когда сообщения больше не нужны
 
     // Передаём в QML-код массив строк
     sendStringListToQML(wholeWindow);
@@ -121,4 +128,23 @@ static void sendStringListToQML(QObject *pWindow)
 
     QMetaObject::invokeMethod(pWindow, "logReceivedList",
         Q_ARG(QVariant, QVariant::fromValue(list)));
+
+    // Создаём список из структур
+    QVariantList complexList;
+
+    SharedStruct firstClass;
+    firstClass.m_val = 15;
+    firstClass.m_name1 = "Token";
+    firstClass.m_name2 = "Bottox";
+
+    SharedStruct secondClass;
+    secondClass.m_val = 18;
+    secondClass.m_name1 = "Biber";
+    secondClass.m_name2 = "Asterix";
+
+    complexList << QVariant::fromValue(firstClass);
+    complexList << QVariant::fromValue(secondClass);
+
+    QMetaObject::invokeMethod(pWindow, "logReceivedComplexList",
+        Q_ARG(QVariant, QVariant::fromValue(complexList)));
 }

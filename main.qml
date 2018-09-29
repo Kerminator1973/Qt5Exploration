@@ -26,6 +26,13 @@ Window {
         }
     }
 
+    function logReceivedComplexList(someArray) {
+        console.log("Some complex list is received");
+        for (var i=0; i < someArray.length; i++) {
+            console.log("Item: {" + someArray[i].val + ", '" + someArray[i].name1 + "', '" + someArray[i].name2 + "'}");
+        }
+    }
+
     // Определяем две кнопки, сообщения о нажатии которых
     // переадрессуем друг другу
     MButton {
@@ -94,14 +101,14 @@ Window {
         leftButtonId.notify.connect(rootComponentId.receiveInfo)
         rightButtonId.notify.connect(rootComponentId.receiveInfo)
 
-        // Выполняем работу с общей структурой, через конкретный объект,
-        // созданные в коде C++
+        // Работает с общей структурой, через конкретный объект,
+        // созданный в коде C++
         console.log("classObj.sharedStruct.val = " + classObj.sharedStruct.val)
-        console.log("name1 =" + classObj.sharedStruct.name1)
-        console.log("name2 =" + classObj.sharedStruct.name2)
+        console.log("name1 = '" + classObj.sharedStruct.name1 + "'")
+        console.log("name2 = '" + classObj.sharedStruct.name2 + "'")
 
-        classObj.sharedStruct.name1 = "abc"  //Calls setter
-        classObj.sharedStruct.name2 = "ans" // Calls setter
+        classObj.sharedStruct.name1 = "Bob"
+        classObj.sharedStruct.name2 = "Dilan"
     }
 }
 

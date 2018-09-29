@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QDebug>
+#include <QMetaType>
 using namespace std;
 
 struct SharedStruct {
@@ -18,6 +19,8 @@ private:
     Q_PROPERTY(QString name1 MEMBER m_name1)
     Q_PROPERTY(QString name2 MEMBER m_name2)
 };
+
+Q_DECLARE_METATYPE(SharedStruct)    // Добавляем META-данные к описанной структуре
 
 class SharedClass : public QObject
 {
@@ -47,7 +50,5 @@ public:
 signals:
     void sharedStructChanged();
 };
-
-Q_DECLARE_METATYPE(SharedStruct)
 
 #endif // SHAREDCLASS_H
