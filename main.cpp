@@ -4,12 +4,15 @@
 #include <QQuickItem>
 #include <QQuickWindow>
 #include <QDebug>   // Заголовочный файл нужен для обеспечения возможности использовать qDebug()
-#include "myqmlproxyclass.h"
 
 // Включаемые файлы нужны для использования разделяемых между C++ и QML структур
 #include <QQmlContext>
 #include <QObject>
 #include "sharedclass.h"
+
+#include "myqmlproxyclass.h"
+#include "mypersonallistmodel.h"
+
 
 // Ключевая ссылка:
 // http://doc.qt.io/qt-5/qtqml-cppintegration-interactqmlfromcpp.html
@@ -32,6 +35,21 @@ int main(int argc, char *argv[])
     classObj.strObj.m_name1 = "Maxim";
     classObj.strObj.m_name2 = "Rozhkov";
     engine.rootContext()->setContextProperty( "classObj", &classObj);
+
+    // Создаём модель (для ListView) и заполняем её некоторыми данными
+    MessageEntry m1(QString("1223"), QString("Apple"));
+    MessageEntry m2(QString("1256"), QString("Amazon"));
+    MessageEntry m3(QString("1278"), QString("Microsoft"));
+    MessageEntry m4(QString("1309"), QString("Google"));
+
+    MyPersonalListModel model;
+    model.addEntry(m1);
+    model.addEntry(m2);
+    model.addEntry(m3);
+    model.addEntry(m4);
+
+    // Передаём в QML нашу модель с именем "quickListModel"
+    engine.rootContext()->setContextProperty("quickListModel", &model);
 
     // Загружаем QML-документ
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));

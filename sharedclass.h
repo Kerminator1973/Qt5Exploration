@@ -32,7 +32,9 @@ public:
     SharedStruct strObj;
 
 public:
-    explicit SharedClass(QObject *parent = nullptr) {}
+    explicit SharedClass(QObject *parent = nullptr) {
+        Q_UNUSED(parent);
+    }
 
     // Edit: changed get function
     SharedStruct getSharedStruct() const

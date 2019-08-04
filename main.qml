@@ -92,6 +92,26 @@ Window {
         }
     }
 
+    // Список передаётся из C++ кода
+    ListView {
+        id: quickMessageListData        // Идентификатор органа управления
+        model: quickListModel           // Под этим именем будет определёна модель в вызове setContextProperty()
+        anchors.top: listView.bottom    // Список помещается под органом управления с именем listView
+
+        width: 400                      // Фиксированный размер списка 400x200
+        height: 200
+
+        delegate: Rectangle {           // Определяем описание отдельных строк списка
+
+            width: 400                  // Геометрические размеры
+            height: 25
+            color:"#808080"             // Цвет фона
+            Text {                      // Текст, комбинированный из нескольких элементов
+                text: model.name + " (" + model.id + ")"
+            }
+        }
+    }
+
     Component.onCompleted: {
         // Связываем сигналы и слоты каждой из кнопок друг с другом
         leftButtonId.notify.connect(rightButtonId.receiveInfo)
