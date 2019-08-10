@@ -140,12 +140,18 @@ static void createQMLDynamically(QQmlApplicationEngine& engine)
 
 static void sendStringListToQML(QObject *pWindow)
 {
+    // Иллюстрируем, как мы моежм передать в QML массив, состоящий
+    // из простых типов данных
+
     // В список можно поместить объекты типов, известных классу QVariantList
     QVariantList list;
     list << 10 << QColor(Qt::green) << "bottles";
 
     QMetaObject::invokeMethod(pWindow, "logReceivedList",
         Q_ARG(QVariant, QVariant::fromValue(list)));
+
+    // Иллюстрируем, что мы можем отправить в метод QML
+    // сложную структуру, состоящую из нескольких полей
 
     // Создаём список из структур
     QVariantList complexList;

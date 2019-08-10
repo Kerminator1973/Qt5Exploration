@@ -12,7 +12,7 @@ Item {
 
         // Значения "по умолчанию". Могут быть изменены через свойства
         // родительского элемента
-        width: 100
+        width: 300
         height: 100
         color: "green"
 
@@ -20,7 +20,7 @@ Item {
             id : componentTextId
             anchors.centerIn: parent
             font.pointSize: 20
-            text : "Hello"
+            text : "I'm a rect!"
         }
     }
 }
