@@ -41,12 +41,20 @@ int main(int argc, char *argv[])
     MessageEntry m2(QString("1256"), QString("Amazon"));
     MessageEntry m3(QString("1278"), QString("Microsoft"));
     MessageEntry m4(QString("1309"), QString("Google"));
+    MessageEntry m5(QString("1310"), QString("Facebook"));
+    MessageEntry m6(QString("1400"), QString("Twitter"));
+    MessageEntry m7(QString("1408"), QString("Square"));
+    MessageEntry m8(QString("1415"), QString("Oracle"));
 
     MyPersonalListModel model;
     model.addEntry(m1);
     model.addEntry(m2);
     model.addEntry(m3);
     model.addEntry(m4);
+    model.addEntry(m5);
+    model.addEntry(m6);
+    model.addEntry(m7);
+    model.addEntry(m8);
 
     // Передаём в QML нашу модель с именем "quickListModel"
     engine.rootContext()->setContextProperty("quickListModel", &model);
@@ -126,6 +134,9 @@ static void createQMLDynamically(QQmlApplicationEngine& engine)
     QQmlEngine::setObjectOwnership(object, QQmlEngine::CppOwnership);
 
     // Настраиваем положение (подчинение) созданного компонента
+    //QObject *firstPage = engine.rootObjects().first()->findChild<QObject*>("firstPage");
+    //object->setParentItem(qobject_cast<QQuickItem*>(firstPage));
+
     object->setParentItem(window->contentItem());   // Входной параметр - root
     object->setParent(&engine);
 

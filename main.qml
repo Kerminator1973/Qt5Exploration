@@ -78,9 +78,8 @@ Window {
             // динамически добавлять элементы в список
             ListView {
                 id: listView
-                anchors.left: leftButtonId.right
-                width: 600
-                height: 250
+                width: parent.width
+                height: parent.height
 
                 model: listModel
                 delegate: Rectangle {
@@ -115,18 +114,20 @@ Window {
             ListView {
                 id: quickMessageListData        // Идентификатор органа управления
                 model: quickListModel           // Под этим именем будет определёна модель в вызове setContextProperty()
-                anchors.top: listView.bottom    // Список помещается под органом управления с именем listView
-
-                width: 600                      // Фиксированный размер списка 600x200
-                height: 200
+                width: parent.width
+                height: parent.height
 
                 delegate: Rectangle {           // Определяем описание отдельных строк списка
 
                     width: 600                  // Геометрические размеры
-                    height: 25
-                    color:"#808080"             // Цвет фона
+                    height: 120
+                    color: "white"              // Цвет фона
                     Text {                      // Текст, комбинированный из нескольких элементов
                         text: model.name + " (" + model.id + ")"
+
+                        font.family: "Helvetica"
+                        font.pointSize: 32
+                        font.bold: true
                     }
                 }
             }
