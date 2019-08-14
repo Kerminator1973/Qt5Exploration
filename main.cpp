@@ -124,8 +124,7 @@ int main(int argc, char *argv[])
 // Метод динамически создаёт QML-объект из QML-шаблона
 static void createQMLDynamically(QQmlApplicationEngine& engine)
 {
-    QQuickWindow *window = qobject_cast<QQuickWindow*>(engine.rootObjects().at(0));
-
+    // Создаём новый QML-компонент из C++ кода
     QQmlComponent component(&engine, QUrl("qrc:/DynamicWindow.qml"));
     QQuickItem *object = qobject_cast<QQuickItem*>(component.create());
 
@@ -133,11 +132,18 @@ static void createQMLDynamically(QQmlApplicationEngine& engine)
     // JavaScript. Для этого нужно сделать:
     QQmlEngine::setObjectOwnership(object, QQmlEngine::CppOwnership);
 
-    // Настраиваем положение (подчинение) созданного компонента
-    //QObject *firstPage = engine.rootObjects().first()->findChild<QObject*>("firstPage");
-    //object->setParentItem(qobject_cast<QQuickItem*>(firstPage));
+    // Указываем положение добавляемого элемента в иерархии окна,
+    // т.е. мы создаём его на нужном нам уровне вложенности.
+    // Поиск осуществляем по значениею свойства "objectName"
+    QObject *swipedItem = engine.rootObjects().first()->findChild<QObject*>("firstPageInSwipeView");
+    object->setParentItem(qobject_cast<QQuickItem*>(swipedItem));
 
-    object->setParentItem(window->contentItem());   // Входной параметр - root
+    // Ниже идёт упрощённый вариант доступа к корневому элементу QQuickWindow
+    //QQuickWindow *window = qobject_cast<QQuickWindow*>(engine.rootObjects().at(0));
+    //object->setParentItem(window->contentItem());   // Входной параметр - root
+
+    // Указываем, что родительским элементом, который будет удалять этот
+    // объект пользовательского интерфейса является QML Engine
     object->setParent(&engine);
 
     // Настраиваем геометрические свойства объекта

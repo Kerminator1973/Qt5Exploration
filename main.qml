@@ -38,13 +38,14 @@ Window {
     // Разбиваем органы управления на три отдельных элемента, переключаться
     // между которыми можно используя жест "смашивание" / "swipe"
     SwipeView {
-        id: view
+        id: view    // Это свойство используется объектом PageIndicator
 
         currentIndex: 1
         anchors.fill: parent
 
         Item {
             id: firstPage
+            objectName: "firstPageInSwipeView"
 
             // Определяем две кнопки, сообщения о нажатии которых
             // переадрессуем друг другу
