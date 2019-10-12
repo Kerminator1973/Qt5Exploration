@@ -1,4 +1,5 @@
 QT += quick
+QT += network
 CONFIG += c++11
 
 # The following define makes your compiler emit warnings if you use
@@ -14,6 +15,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
+        myhttpservice.cpp \
         mypersonallistmodel.cpp
 
 RESOURCES += qml.qrc
@@ -30,6 +32,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    myhttpservice.h \
     myqmlproxyclass.h \
     mypersonallistmodel.h \
     sharedclass.h
