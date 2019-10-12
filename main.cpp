@@ -20,6 +20,7 @@
 static void createQMLDynamically(QQmlApplicationEngine& engine);
 static void sendStringListToQML(QObject *pWindow);
 
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
@@ -116,6 +117,11 @@ int main(int argc, char *argv[])
 
     // Передаём в QML-код массив строк
     sendStringListToQML(wholeWindow);
+
+    // Привязываем QML-кнопку к обработчику на C++
+    qDebug() << "The second connection complete status is: " <<
+        QObject::connect(wholeWindow, SIGNAL(qmlDoRequestSignal()),
+        &myQMLProxyClass, SLOT(cppOnButtonClicked()));
 
     // Запускаем основной цикл обработки сообщений
     return app.exec();

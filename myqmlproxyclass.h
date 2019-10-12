@@ -13,6 +13,10 @@ public slots:
     void cppSlot(const QString &msg) {
         qDebug() << "Called the C++ slot with message:" << msg;
     }
+
+    void cppOnButtonClicked() {
+        qDebug() << "Called the C++ slot without message";
+    }
 };
 
 #endif // MYQMLPROXYCLASS_H

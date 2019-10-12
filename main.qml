@@ -11,6 +11,7 @@ Window {
 
     // Определяем сигнал, посредством которого передаём сообщение в C++ код
     signal qmlSignal(string msg)
+    signal qmlDoRequestSignal()
 
     // Определяем слот, который будет получать информацию от MButtons
     // и пересылать этот сигнал дальше по цепочке
@@ -70,6 +71,23 @@ Window {
                     console.log("It is useful information: " + msg);
                     return 55;
                 }
+            }
+
+            // Создаём дополнительную кнопку, при нажатии на которую
+            // будет сформирован запрос на сервер
+            Button {
+                 id: btnMakeRequest
+                 objectName: "TheThirdButton"
+                 anchors.left: rightButtonId.left
+                 anchors.top: rightButtonId.bottom
+                 text: "Make a Request"
+
+                 // Определяем сигнал, который будет сгенерирован
+                 // при нажатии кнопки
+                 MouseArea {
+                     anchors.fill: parent
+                     onClicked: rootComponentId.qmlDoRequestSignal()
+                 }
             }
         }
         Item {
