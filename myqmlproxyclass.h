@@ -1,8 +1,13 @@
 #ifndef MYQMLPROXYCLASS_H
 #define MYQMLPROXYCLASS_H
 
+// В идеологии Qt, для обработки событий от компонентов QML в C++ коде
+// используются proxy-классы.
+
 #include <QGuiApplication>
 #include <QDebug>   // Заголовочный файл нужен для обеспечения возможности использовать qDebug()
+
+class QNetworkReply;
 
 // Proxy-класс, через который обмениваются информацией
 // два компонента пользовательского интерфейса (QML)
@@ -14,9 +19,10 @@ public slots:
         qDebug() << "Called the C++ slot with message:" << msg;
     }
 
-    void cppOnButtonClicked() {
-        qDebug() << "Called the C++ slot without message";
-    }
+    void cppOnButtonClicked();
+
+public:
+    void replyFinished(QNetworkReply *reply);
 };
 
 #endif // MYQMLPROXYCLASS_H
