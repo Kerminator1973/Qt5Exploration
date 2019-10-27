@@ -1,6 +1,8 @@
 #include <QtGlobal>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
+#include <QJsonValue>
 #include "myhttpservice.h"
 #include "myqmlproxyclass.h"
 
@@ -109,8 +111,17 @@ void MyQmlProxyClass::replyFinished(QNetworkReply *reply) {
                 if (d.isObject())
                     qDebug() << "Получен объект";
 
-                if (d.isArray())
-                    qDebug() << "Получен объект";
+                if (d.isArray()) {
+
+                    qDebug() << "Получен массив";
+
+                    QJsonArray array = d.array();
+                    for (const QJsonValue v : array) {
+                        qDebug() << "name: " << v.toObject()["name"].toString();
+
+                        // TODO: через сигнал можно добавить полученные данные в QML-форму
+                    }
+                }
             }
         }
     }
