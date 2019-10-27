@@ -1,4 +1,4 @@
-#include <QNetworkReply>
+#include <QtGlobal>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include "myhttpservice.h"
@@ -11,6 +11,8 @@ void MyQmlProxyClass::cppOnButtonClicked() {
     auto manager = CMyHttpService::getManager();
 
     connect(manager, &QNetworkAccessManager::finished, this, &MyQmlProxyClass::replyFinished);
+
+    // TODO: перенести функционал в CMyHttpService
 
     // Выполняем GET-запрос
     QNetworkRequest request;
@@ -34,14 +36,14 @@ void MyQmlProxyClass::cppOnButtonClicked() {
     // Добавляем ещё несколько обработчиков событий, но уже связанных
     // с QNetworkReply, а не с QNetworkAccessManager
 
-    // Обработка ошибок подключения для различных ситуаций
-    // connect(networkReply, &QNetworkReply::error, this, &MyClass::networkReplyError);
-    //connect(networkReply, &QNetworkReply::QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error,
-    //    this, &MyClass::networkReplyError);
+    // Обработка ошибки при возникновении сетевого сбоя, например, невозможности
+    // соединения с хостом
+    connect(networkReply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+        this, &MyQmlProxyClass::networkReplyError);
 
     // В теории, необходимо обрабатывать загруженные документы в слоте readyRead,
     // но на практике это можно делать и в слоте replyFinished
-    // connect(networkReply, &QNetworkReply::readyRead, this, &MyClass::readyRead);
+    // connect(networkReply, &QNetworkReply::readyRead, this, &MyQmlProxyClass::readyRead);
 
     // Сигнал QNetworkReply::finished может быть использован для обработки
     // полученных результатов
@@ -55,6 +57,15 @@ void MyQmlProxyClass::cppOnButtonClicked() {
         QList<QPair<QByteArray, QByteArray>> responses = networkReply->rawHeaderPairs();
         qDebug() << responses;
     });
+}
+
+// В данной реализации - не актуально
+// void MyQmlProxyClass::readyRead(QNetworkReply *reply) {
+//}
+
+void MyQmlProxyClass::networkReplyError(QNetworkReply::NetworkError errorCode)
+{
+    qDebug() << "MyQmlProxyClass::requestError: " << errorCode;
 }
 
 void MyQmlProxyClass::replyFinished(QNetworkReply *reply) {
@@ -74,7 +85,7 @@ void MyQmlProxyClass::replyFinished(QNetworkReply *reply) {
         // Обрабатываем ответ сервера
         if(!reply->error()) {
 
-            // TODO: Здесь имеет смысл обработкать HTTP Status Codes,
+            // TODO: Здесь имеет смысл обработать HTTP Status Codes,
             // например, так:
             //
             // if (reply->error() == QNetworkReply::OperationCanceledError) {}

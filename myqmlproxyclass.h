@@ -6,8 +6,8 @@
 
 #include <QGuiApplication>
 #include <QDebug>   // Заголовочный файл нужен для обеспечения возможности использовать qDebug()
+#include <QNetworkReply>
 
-class QNetworkReply;
 
 // Proxy-класс, через который обмениваются информацией
 // два компонента пользовательского интерфейса (QML)
@@ -21,8 +21,13 @@ public slots:
 
     void cppOnButtonClicked();
 
-public:
+public slots:
     void replyFinished(QNetworkReply *reply);
+    void networkReplyError(QNetworkReply::NetworkError errorCode);
+
+    // В данной реализации - не актуально
+    // void readyRead(QNetworkReply *reply);
+
 };
 
 #endif // MYQMLPROXYCLASS_H
