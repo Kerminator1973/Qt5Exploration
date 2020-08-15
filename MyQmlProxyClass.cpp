@@ -40,8 +40,14 @@ void MyQmlProxyClass::cppOnButtonClicked() {
 
     // Обработка ошибки при возникновении сетевого сбоя, например, невозможности
     // соединения с хостом
-    connect(networkReply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
-        this, &MyQmlProxyClass::networkReplyError);
+
+    // Раньше, до Qt 5.15, использовался следующий код:
+    // connect(networkReply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+    //    this, &MyQmlProxyClass::networkReplyError);
+    // В Qt 5.15 можно получить сообщение об ошибке: 'error' is deprecated:
+    // Use QNetworkReply::errorOccurred(QNetworkReply::NetworkError) instead
+    // Собирается и работает вот такой код:
+    connect(networkReply, &QNetworkReply::errorOccurred, this, &MyQmlProxyClass::networkReplyError);
 
     // В теории, необходимо обрабатывать загруженные документы в слоте readyRead,
     // но на практике это можно делать и в слоте replyFinished
