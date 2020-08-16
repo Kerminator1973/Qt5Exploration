@@ -45,3 +45,31 @@ request.setSslConfiguration(QSslConfiguration::defaultConfiguration());
 ```
 
 Необходимо добавить динамические библиотеки из состава [OpenSSL](https://www.openssl.org/). Их можно собрать самостоятельно из исходных текстов, либо загрузить из доверенного источника (я использовал - https://indy.fulgan.com/SSL/). Необходимо учитывать разрядность библиотек (**x64, x32**). Названия требуемых библиотек: **libeay32.dll** и **ssleay32.dll**
+
+## Изменения в Qt API
+
+При портировании приложения с Qt 5.12 на 5.15 столкнулся к проблемой "deprecated call". Было:
+
+```cpp
+connect(networkReply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error),
+    this, &MyQmlProxyClass::networkReplyError);
+```
+
+Эквивалентный код в Qt 5.15:
+
+```cpp
+connect(networkReply, &QNetworkReply::errorOccurred, this, &MyQmlProxyClass::networkReplyError);
+```
+
+Код, несомненно, стал более компактным и читается легче, но при переходе на новую подверсию, код пришлось изменять.
+
+## Подключение openSSL
+
+Корпорация Google запретила использование http в Android и подключение openSSL стало безальтернативным. При этом, в новые SDK включены бинарные библиотеки openSSL и их уже не нужно собирать вручную. Теперь достаточно модификация pro-файла:
+
+```
+HEADERS += \
+    myhttpservice.h \
+    ...
+android: include(C:/Android_SDK/android_openssl/openssl.pri)
+```
